@@ -1,0 +1,7 @@
+# Ignore backup files and other cruft
+*~
+DEADJOE
+*.bak
+
+# Ignore installed composer dependencies
+/vendor/
