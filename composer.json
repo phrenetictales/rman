@@ -1,6 +1,7 @@
 {
 	"require": {
-		"slim/slim": "2.2.0",
-		"illuminate/database": "4.0.*@dev"
+		"slim/slim": "2.*",
+		"illuminate/database": "4.0.*@dev",
+		"mustache/mustache": " v2.3.1"
 	}
 }
