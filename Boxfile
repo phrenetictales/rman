@@ -1,0 +1,29 @@
+web1:
+  name: phrenetic
+  shared_writable_dirs:
+    - cache
+    - logs
+    - public/images/artists
+  document_root: public
+  php: 5.4.14
+  php_extensions:
+    - mysql
+    - pdo
+    - pdo_mysql
+    - gd
+    - exif
+    - phar
+    - session
+    - xml
+    - xmlwriter
+    - uploadprogress
+    - sqlite
+    - memcache
+    - memcached
+  after_build:
+    - "if [ ! -f composer.phar ]; then curl -s http://getcomposer.org/installer | php; fi; php composer.phar install"
+  php_upload_max_filesize: "8M"
+
+db1:
+  name: phreneticdb
+  type: mysql
