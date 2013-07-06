@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9d033d945cb712dd1b908cbfd8dd0568",
+    "hash": "502aebca2844771888eb842e9fde6689",
     "packages": [
         {
             "name": "illuminate/container",
@@ -204,6 +204,44 @@
                 }
             ],
             "time": "2013-06-11 00:56:49"
+        },
+        {
+            "name": "jsebrech/o",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jsebrech/php-o.git",
+                "reference": "v0.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jsebrech/php-o/zipball/v0.1.0",
+                "reference": "v0.1.0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "O": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Joeri Sebrechts",
+                    "email": "joeri@sebrechts.net"
+                }
+            ],
+            "description": "O-syntax for PHP",
+            "homepage": "https://github.com/jsebrech/php-o",
+            "time": "2013-03-25 20:54:09"
         },
         {
             "name": "mustache/mustache",
