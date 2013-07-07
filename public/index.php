@@ -83,21 +83,25 @@ $app->get('/', function() use ($app) {
 	$app->render('index');
 });
 
-$app->get('/artists', function() use ($app) {
+$app->get('/artists/', function() use ($app) {
 	$artists = RMAN\Models\ORM\Artist::get();
-	$app->render('artists', ['artists' => $artists]);
+	$app->render('artists/index', ['artists' => $artists]);
 });
 
 $app->get('/artists/:id', function($id) use ($app) {
 	$artist = RMAN\Models\ORM\Artist::find($id);
-	$app->render('artist', ['artist' => $artist]);
+	$app->render('artists/view', ['artist' => $artist]);
+})->conditions(['id' => '\d+']);
+
+$app->get('/artists/create/', function() use ($app) {
+	$artist = new RMAN\Models\ORM\Artist;
+	$app->render('artists/create', ['artist' => $artist]);
 });
 
-$app->post('/artists/create', function() use ($app) {
-	
-});
-
-$app->get('/artists/save', function($request) {
+$app->post('/artists/save/', function() use ($app) {
+	$artist = new RMAN\Models\ORM\Artist($app->request()->post());
+	$artist->save();
+	$app->response()->redirect('/artists/' . $artist->id);
 });
 
 $app->run();
