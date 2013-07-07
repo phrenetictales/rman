@@ -1,8 +1,15 @@
 {
+	"repositories": [
+		{
+			"type":	"vcs",
+			"url":	"https://github.com/phrenetictales/mustache.php"
+		}
+	],
 	"require": {
 		"slim/slim": "2.*",
 		"illuminate/database": "4.0.*@dev",
-		"mustache/mustache": " v2.3.1",
-		"jsebrech/o": " v0.1.0"
+		"mustache/mustache": "dev-temporaryfixlaravelrelationships",
+		"jsebrech/o": " v0.1.0",
+		"intervention/image": " 1.4.1"
 	}
 }

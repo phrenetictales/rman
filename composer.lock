@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "502aebca2844771888eb842e9fde6689",
+    "hash": "fb6b75f550fc371a633d878d26c68901",
     "packages": [
         {
             "name": "illuminate/container",
@@ -206,6 +206,56 @@
             "time": "2013-06-11 00:56:49"
         },
         {
+            "name": "intervention/image",
+            "version": "1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Intervention/image.git",
+                "reference": "1.4.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/1.4.1",
+                "reference": "1.4.1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "illuminate/support": "4.*",
+                "php": ">=5.3.0"
+            },
+            "suggest": {
+                "intervention/imagecache": "Caching extension for the Intervention Image library"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Intervention\\Image": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oliver Vogel",
+                    "email": "oliver@olivervogel.net",
+                    "homepage": "http://olivervogel.net/"
+                }
+            ],
+            "description": "Image handling and manipulation library with support for Laravel 4 integration",
+            "homepage": "http://intervention.olivervogel.net/image/",
+            "keywords": [
+                "gd",
+                "image",
+                "laravel",
+                "thumbnail",
+                "watermark"
+            ],
+            "time": "2013-05-29 09:44:42"
+        },
+        {
             "name": "jsebrech/o",
             "version": "v0.1.0",
             "source": {
@@ -245,17 +295,11 @@
         },
         {
             "name": "mustache/mustache",
-            "version": "v2.3.1",
+            "version": "dev-temporaryfixlaravelrelationships",
             "source": {
                 "type": "git",
-                "url": "https://github.com/bobthecow/mustache.php.git",
-                "reference": "v2.3.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/v2.3.1",
-                "reference": "v2.3.1",
-                "shasum": ""
+                "url": "https://github.com/phrenetictales/mustache.php",
+                "reference": "21529205a93171ee23dc4ccb3d3a5e5b1380d400"
             },
             "require": {
                 "php": ">=5.2.4"
@@ -266,7 +310,6 @@
                     "Mustache": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -283,7 +326,7 @@
                 "mustache",
                 "templating"
             ],
-            "time": "2013-04-25 15:23:30"
+            "time": "2013-07-07 21:43:57"
         },
         {
             "name": "nesbot/carbon",
@@ -380,7 +423,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "illuminate/database": 20
+        "illuminate/database": 20,
+        "mustache/mustache": 20
     },
     "platform": [
 

@@ -89,7 +89,7 @@ $app->get('/artists/', function() use ($app) {
 });
 
 $app->get('/artists/:id', function($id) use ($app) {
-	$artist = RMAN\Models\ORM\Artist::find($id);
+	$artist = RMAN\Models\ORM\Artist::with('picture')->find($id);
 	$app->render('artists/view', ['artist' => $artist]);
 })->conditions(['id' => '\d+']);
 
@@ -102,6 +102,50 @@ $app->post('/artists/save/', function() use ($app) {
 	$artist = new RMAN\Models\ORM\Artist($app->request()->post());
 	$artist->save();
 	$app->response()->redirect('/artists/' . $artist->id);
+});
+
+$app->post('/pictures/upload/', function() use ($app) {
+	require_once ROOTDIR.'/lib/filestore.php';
+	
+	$store = new FileStore(ROOTDIR.'/store/picture-store.zip');
+	$pictures = [];
+	
+	foreach($_FILES as $file) {
+		
+		$info = (object)$file;
+		$img = Intervention\Image\Image::make($info->tmp_name);
+		
+		unset($info->error);
+		$info->storename = $store->add($info->tmp_name);
+		unset($info->tmp_name);
+		
+		$picture = new RMAN\Models\ORM\Picture((array)$info);
+		$picture->width = $img->width;
+		$picture->height = $img->height;
+		$picture->save();
+		
+		$pictures[] = $picture->toArray();
+	}
+	
+	$response = $app->response();
+	
+	$response['Content-Type'] = 'application/json';
+	$response->body(json_encode($pictures));
+});
+
+$app->get('/pictures/display/:storename', function($storename) use ($app) {
+	require_once ROOTDIR.'/lib/filestore.php';
+	
+	$store = new FileStore(ROOTDIR.'/store/picture-store.zip');
+	$picture = RMAN\Models\ORM\Picture::where('storename', $storename)->first();
+	
+	if (empty($picture)) {
+		die('FOOBAR');
+	}
+	
+	$response = $app->response();
+	$response['Content-Type'] = $picture->type;
+	$response->body($store->get($picture->storename));
 });
 
 $app->run();
