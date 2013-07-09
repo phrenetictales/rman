@@ -42,6 +42,7 @@
   </script>
   <p>
     <label for="name">Name</label>
+    <br/>
     <input name="name" value="{{name}}"/>
   </p>
 {{/artist}}
