@@ -11,6 +11,9 @@ use Illuminate\Events\Dispatcher as EventDispatcher;
 O\O::init();
 
 
+////////////////////////////////////////////////////////////////////////////////
+// Load the Mustache Template engine and configure it                         //
+////////////////////////////////////////////////////////////////////////////////
 $mustache = new Mustache_Engine([
 	'loader' => new Mustache_Loader_FilesystemLoader(
 		ROOTDIR.'/views/', 
@@ -44,13 +47,16 @@ class SlimViewSimple extends \Slim\View
 
 $app = new \Slim\Slim(['view' => new SlimViewSimple($mustache)]);
 
+////////////////////////////////////////////////////////////////////////////////
+// Load Laravel Database and ORM (Eloquent)                                   //
+////////////////////////////////////////////////////////////////////////////////
 $capsule = new Capsule;
 $capsule->addConnection(array(
 	'driver'    => 'mysql',
 	'host'      => '127.0.0.1',
 	'database'  => 'phrenetic',
 	'username'  => 'root',
-	'password'  => '',
+	'password'  => 'shit4b',
 	'charset'   => 'utf8',
 	'collation' => 'utf8_general_ci',
 	'prefix'    => 'phr_',
@@ -59,7 +65,6 @@ $capsule->addConnection(array(
 $capsule->setEventDispatcher(new EventDispatcher());
 $capsule->bootEloquent();
 $capsule->setAsGlobal();
-
 
 spl_autoload_register(function ($class) {
 	$ns = O\c(O\s($class))->explode('\\');
@@ -78,11 +83,24 @@ spl_autoload_register(function ($class) {
 	}
 });
 
-
+////////////////////////////////////////////////////////////////////////////////
+// Hello World!                                                               //
+// TODO: replace with front page: slideshow, news, etc..                      //
+////////////////////////////////////////////////////////////////////////////////
 $app->get('/', function() use ($app) {
 	$app->render('index');
 });
 
+////////////////////////////////////////////////////////////////////////////////
+// Artists                                                                    //
+//                                                                            //
+// * List                                                                     //
+// * Create                                                                   //
+// * Save                                                                     //
+// * View                                                                     //
+//                                                                            //
+// TODO: edit                                                                 //
+////////////////////////////////////////////////////////////////////////////////
 $app->get('/artists/', function() use ($app) {
 	$artists = RMAN\Models\ORM\Artist::get();
 	$app->render('artists/index', ['artists' => $artists]);
@@ -104,6 +122,90 @@ $app->post('/artists/save/', function() use ($app) {
 	$app->response()->redirect('/artists/' . $artist->id);
 });
 
+////////////////////////////////////////////////////////////////////////////////
+// Releases                                                                   //
+//                                                                            //
+// * List                                                                     //
+// * Create                                                                   //
+// * Save                                                                     //
+// * View                                                                     //
+//                                                                            //
+// TODO: edit                                                                 //
+////////////////////////////////////////////////////////////////////////////////
+$app->get('/releases/', function() use ($app) {
+	$releases = RMAN\Models\ORM\Release::get();
+	$app->render('releases/index', ['releases' => $releases]);
+});
+
+$app->get('/releases/:id', function($id) use ($app) {
+	$release = RMAN\Models\ORM\Release::with('picture')->find($id);
+	$app->render('releases/view', ['release' => $release]);
+})->conditions(['id' => '\d+']);
+
+$app->get('/releases/create/', function() use ($app) {
+	$release = new RMAN\Models\ORM\Release;
+	$artists = RMAN\Models\ORM\Artist::get();
+	
+	$tags = array_map(function($artist) {
+		
+		return array(
+			'id'	=> $artist['id'],
+			'value'	=> $artist['id'],
+			'label'	=> $artist['name']
+		);
+	}, $artists->toArray());
+	
+	$app->render('releases/create', [
+		'release'	=> $release,
+		'tags'	=> json_encode($tags)
+	]);
+});
+
+$app->post('/releases/save/', function() use ($app) {
+	
+	$request = $app->request();
+	$release = new RMAN\Models\ORM\Release;
+	
+	
+	$release->title = $request->post('title');
+	$release->picture_id = $request->post('picture_id');
+	
+	$release->save();
+	
+	$order = 0;
+	
+	foreach($request->post('tracks') as $trk) {
+		if (is_integer($trk)) {
+			$track = RMAN\Models\ORM\Track::find($track);
+			$release->tracks()->save($track);
+		}
+		else {
+			$track = new RMAN\Models\ORM\Track;
+			$track->title = $trk['title'];
+			$track->order = ++$order;
+			$release->tracks()->save($track);
+			
+			
+			foreach($trk['artists'] as $artist_id) {
+				$artist = RMAN\Models\ORM\Artist::find($artist_id);
+				$track->artists()->attach($artist->id);
+			}
+			
+			$track->push();
+		}
+		
+	}
+	
+	$release->push();
+	$app->response()->redirect('/releases/' . $release->id);
+});
+
+////////////////////////////////////////////////////////////////////////////////
+// Pictures                                                                   //
+//                                                                            //
+// * Upload                                                                   //
+// * Display                                                                  //
+////////////////////////////////////////////////////////////////////////////////
 $app->post('/pictures/upload/', function() use ($app) {
 	$pictures = [];
 	

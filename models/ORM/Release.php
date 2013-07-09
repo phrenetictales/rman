@@ -3,12 +3,12 @@
 namespace RMAN\Models\ORM;
 
 
-class Artist extends Base
+class Release extends Base
 {
 	public $timestamps = false;
 	protected $guarded = array('id');
 	
-	protected $with = array('picture');
+	protected $with = array('picture', 'tracks', 'tracks.artists');
 	
 	public function picture()
 	{
@@ -17,6 +17,6 @@ class Artist extends Base
 	
 	public function tracks()
 	{
-		return $this->belongsToMany('RMAN\Models\ORM\Track');
+		return $this->hasMany('RMAN\Models\ORM\Track');
 	}
 }
