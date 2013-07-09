@@ -105,26 +105,30 @@ $app->post('/artists/save/', function() use ($app) {
 });
 
 $app->post('/pictures/upload/', function() use ($app) {
-	require_once ROOTDIR.'/lib/filestore.php';
-	
-	$store = new FileStore(ROOTDIR.'/store/picture-store.zip');
 	$pictures = [];
+	
 	
 	foreach($_FILES as $file) {
 		
-		$info = (object)$file;
-		$img = Intervention\Image\Image::make($info->tmp_name);
-		
-		unset($info->error);
-		$info->storename = $store->add($info->tmp_name);
-		unset($info->tmp_name);
-		
-		$picture = new RMAN\Models\ORM\Picture((array)$info);
-		$picture->width = $img->width;
-		$picture->height = $img->height;
-		$picture->save();
-		
-		$pictures[] = $picture->toArray();
+		try {
+			$img = Intervention\Image\Image::make($file['tmp_name']);
+			$storename = Phrenetic\StoreFile::instance('pictures')
+						->add($file['tmp_name']);
+			
+			$picture = new RMAN\Models\ORM\Picture([
+				'type'		=> $file['type'],
+				'name'		=> $file['name'],
+				'storename'	=> $storename
+			]);
+			$picture->width = $img->width;
+			$picture->height = $img->height;
+			$picture->save();
+			
+			$pictures[] = $picture->toArray();
+		}
+		catch (Exception $e) {
+			$pictures[] = ['error' => $e->getMessage()];
+		}
 	}
 	
 	$response = $app->response();
@@ -134,9 +138,8 @@ $app->post('/pictures/upload/', function() use ($app) {
 });
 
 $app->get('/pictures/display/:storename', function($storename) use ($app) {
-	require_once ROOTDIR.'/lib/filestore.php';
 	
-	$store = new FileStore(ROOTDIR.'/store/picture-store.zip');
+	$store = new Phrenetic\StoreFile('pictures');
 	$picture = RMAN\Models\ORM\Picture::where('storename', $storename)->first();
 	
 	if (empty($picture)) {

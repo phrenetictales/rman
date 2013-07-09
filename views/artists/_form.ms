@@ -28,7 +28,7 @@
     </style>
     <label for="picture">Photo</label>
     <br/>
-    {{^picture}}
+    {{#picture}}
       <img src="/img/profile_person_generic.jpg"/>
     {{/picture}}
     <br/>

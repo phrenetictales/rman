@@ -6,7 +6,7 @@ $('#picture').fileupload({
 				.siblings('img')
 				.attr('src', '/pictures/display/' + file.storename);
 			$('#picture')
-				.siblings('input [name="picture_d"]')
+				.siblings('input[name="picture_id"]')
 				.val(file.id);
 		});
 	},
